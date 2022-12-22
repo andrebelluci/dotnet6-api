@@ -1,0 +1,76 @@
+#install image on docker
+docker pull mcr.microsoft.com/mssql/server:2022-latest
+
+#list docker images
+docker ps
+
+#start image
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=@Sql2022" -p 1433:1433 --name sqlserver --hostname sql1 -d mcr.microsoft.com/mssql/server:2022-latest
+
+#add entity packages
+dotnet add package Microsoft.EntityFrameworkCore
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+
+#install entity tool
+dotnet tool install --global dotnet-ef
+
+#add migrations
+dotnet ef migrations add <Name>
+
+#update database
+dotnet ef database update
+
+#remove a migration before update
+dotnet ef migrations remove
+
+#restore a previous version of migration file
+dotnet ef database update 20221221183353_CreateProduct
+dotnet ef migrations remove
+
+#install outdated package tool
+dotnet tool install --global dotnet-outdated-tool
+
+#upgrade all packages
+dotnet outdated --upgrade
+
+#verify code
+dotnet build
+
+#Applications
+* Rancher
+* WSL
+* Azure Data Studio
+
+#Old Project
+##
+app.MapGet("/", () => "Hello World!");
+app.MapPost("/", () => new { Name = "André Belluci", Age = 33 });
+app.MapGet("/AddHeader", (HttpResponse response) =>
+{
+    response.Headers.Add("Teste", "Andre Belluci");
+    return new { Name = "André Belluci", Age = 33 };
+});
+
+app.MapPost("/saveproduct", (Product product) =>
+{
+    return product.Code + " - " + product.Name;
+});
+
+//api.app.com/users?datastart={date}&dataend={date}
+app.MapGet("/getproduct", ([FromQuery] string dateStart, [FromQuery] string dateEnd) =>
+{
+    return dateStart + " - " + dateEnd;
+});
+
+//api.app.com/user/{code}
+app.MapGet("/getproduct/{code}", ([FromRoute] string code) =>
+{
+    return code;
+});
+
+app.MapGet("/getproductbyheader", (HttpRequest request) =>
+{
+    return request.Headers["product-code"].ToString();
+});
+##
