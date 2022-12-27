@@ -80,7 +80,6 @@ Url: https://localhost:3001/{id}
 Body: ***empty***
 
 ## 👨🏻‍💻 Author
-<a  href="https://www.linkedin.com/in/andrebelluci/">
 <img  style="border-radius: 50%;"  src="https://code.ifoodcorp.com.br/uploads/-/system/user/avatar/1822/avatar.png?width=90"  width="100px;"  alt=""/>
 <br />
 
